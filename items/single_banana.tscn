@@ -1,0 +1,31 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/items/single_banana/banana_0.png" type="Texture" id=1]
+[ext_resource path="res://assets/items/single_banana/banana_5.png" type="Texture" id=2]
+[ext_resource path="res://assets/items/single_banana/banana_1.png" type="Texture" id=3]
+[ext_resource path="res://assets/items/single_banana/banana_2.png" type="Texture" id=4]
+[ext_resource path="res://assets/items/single_banana/banana_4.png" type="Texture" id=5]
+[ext_resource path="res://assets/items/single_banana/banana_3.png" type="Texture" id=6]
+[ext_resource path="res://items/single_banana.gd" type="Script" id=7]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 4.22774, 3.63756 )
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 5 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 6.0
+} ]
+
+[node name="Banana" type="Area2D"]
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 0.992065 )
+shape = SubResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+playing = true
