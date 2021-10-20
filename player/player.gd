@@ -3,7 +3,7 @@ extends KinematicBody2D
 enum AnimState {ANIM_IDLE, ANIM_CHARGE, ANIM_HOLD, ANIM_LAUNCH, ANIM_RISING, ANIM_FALLING}
 
 const GRAVITY = 800
-const MAX_JUMP_TIME = 0.6
+const MAX_JUMP_TIME = 1.0
 const JUMP_TIME_START = 0.1
 const JUMP_SPEED = 315
 const BANANA_JUMP_SPEED = 520
@@ -17,7 +17,8 @@ var floatiness = 1.0
 var has_jumped = false
 var is_charging_jump = false
 var animation_state = AnimState.ANIM_IDLE
-var has_banana = false
+var current_banana = null
+var banana_timer = null
 
 func _ready():
 	$AnimatedSprite.connect("animation_finished", self, "on_animation_finish")
@@ -99,11 +100,24 @@ func handle_slopes():
 				velocity = slope_vector.normalized() * SLOPE_SPEED
 
 func get_jump_speed():
-	if has_banana:
-		has_banana = false
+	if current_banana != null:
+		banana_timer = Timer.new()
+		banana_timer.wait_time = 1.0
+		banana_timer.autostart = false
+		banana_timer.one_shot = true
+		add_child(banana_timer)
+		banana_timer.connect("timeout", self, "on_finished_banana_timer")
+		banana_timer.start()
+		
 		return BANANA_JUMP_SPEED
 	else:
 		return JUMP_SPEED
+
+func on_finished_banana_timer():
+	if current_banana != null:
+		current_banana.enable_banana()
+		current_banana = null
+		banana_timer = null
 
 # ===================== ANIMATION
 
@@ -133,5 +147,7 @@ func on_animation_finish():
 
 # ===================== BANANA
 
-func did_get_banana():
-	has_banana = true
+func did_get_banana(banana):
+	if current_banana == null:
+		current_banana = banana
+		current_banana.disable_banana()
