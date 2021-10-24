@@ -1,3 +1,8 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
 
-[node name="HUDCanvasLayer" type="CanvasLayer"]
+[ext_resource path="res://gui/hud.gd" type="Script" id=1]
+
+[node name="HUDCanvasLayer" type="CanvasLayer" groups=[
+"hud",
+]]
+script = ExtResource( 1 )

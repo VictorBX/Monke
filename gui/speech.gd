@@ -15,9 +15,9 @@ func _ready():
 	$Panel.modulate.a = 0.75
 	text_timer = Timer.new()
 	text_timer.autostart = false
+	text_timer.one_shot = true
 	text_timer.connect("timeout", self, "on_timer_finished")
 	add_child(text_timer)
-	start(["Me monke me banana top monke want banana top", "me want banana", "top"])
 	
 func _process(delta):
 	if did_begin_displaying_text && !did_finish_current_text:
@@ -44,12 +44,13 @@ func start(text: Array):
 func stop():
 	$Panel/Label.percent_visible = 0
 	$Panel/Label.text = ""
-	queue_free()
+	get_tree().call_group("hud", "remove_current_speech")
 
 func on_timer_finished():
 	did_finish_current_text = false
 	if current_text_index + 1 > text.size() - 1:
 		did_finish_displaying_text = true
+		stop()
 	else:
 		current_delay_time = 0
 		current_text_index += 1

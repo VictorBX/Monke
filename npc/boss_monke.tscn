@@ -1,0 +1,31 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/npc/boss/boss_monke_idle_1.png" type="Texture" id=1]
+[ext_resource path="res://assets/npc/boss/boss_monke_idle_2.png" type="Texture" id=2]
+[ext_resource path="res://assets/npc/boss/boss_monke_idle_3.png" type="Texture" id=3]
+[ext_resource path="res://assets/npc/boss/boss_monke_idle_0.png" type="Texture" id=4]
+[ext_resource path="res://npc/boss_monke.gd" type="Script" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "idle",
+"speed": 4.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 33.0946, 14.1513 )
+
+[node name="BossMonkeNPC" type="Area2D"]
+script = ExtResource( 5 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+animation = "idle"
+frame = 3
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.12379, -2.24759 )
+shape = SubResource( 2 )
