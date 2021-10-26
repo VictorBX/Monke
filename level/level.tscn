@@ -138,7 +138,7 @@ position = Vector2( 183.734, -492.303 )
 position = Vector2( 187.075, -126.595 )
 
 [node name="PlayerNode" parent="." instance=ExtResource( 1 )]
-position = Vector2( 49.5886, -58.1823 )
+position = Vector2( 50, -57 )
 
 [node name="MogulMonke" parent="." instance=ExtResource( 20 )]
 position = Vector2( 213.979, -1435.96 )
