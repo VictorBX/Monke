@@ -10,11 +10,10 @@ func on_body_entered(body):
 		get_tree().call_group("player", "did_get_banana", self)
 	
 func disable_banana():
+	$PowerupAudioPlayer.play()
 	is_available = false
 	$AnimatedSprite.modulate.a = 0.5
-	$CPUParticles2D.emitting = false
 
 func enable_banana():
 	is_available = true
 	$AnimatedSprite.modulate.a = 1.0
-	$CPUParticles2D.emitting = true

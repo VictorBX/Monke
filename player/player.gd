@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-enum AnimState {ANIM_IDLE, ANIM_WALK, ANIM_CHARGE, ANIM_HOLD, ANIM_LAUNCH, ANIM_RISING, ANIM_FALLING}
+enum AnimState {ANIM_IDLE, ANIM_WALK, ANIM_CHARGE, ANIM_HOLD, ANIM_LAUNCH, ANIM_RISING, ANIM_FALLING, ANIM_GET_BANANA, ANIM_CELEBRATION}
 
 const GRAVITY = 800
 const MAX_JUMP_TIME = 1.0
@@ -21,19 +21,28 @@ var animation_state = AnimState.ANIM_IDLE
 var current_banana = null
 var banana_timer = null
 var black_holes = []
+var is_floatiness_enabled = false
+var did_finish_game = false
+var jump_fart_node = preload("res://particles/jump_fart.tscn")
+var last_facing_direction = 1
 
 func _ready():
 	$AnimatedSprite.connect("animation_finished", self, "on_animation_finish")
 
 # ===================== MOVEMENT
 
+
 func _physics_process(delta):
+	if did_finish_game:
+		return
+	
 	# gravity
 	velocity.y += GRAVITY * delta * floatiness
 	
 	# jumping
 	if is_on_floor():
 		if has_jumped:
+			$LandingAudioPlayer.play()
 			has_jumped = false
 			velocity.x = 0
 			last_x_velocity = 0
@@ -52,6 +61,7 @@ func _physics_process(delta):
 				velocity.x = lerp(velocity.x, 0, 0.5)
 		
 		if x_direction != 0:
+			last_facing_direction = x_direction
 			$AnimatedSprite.scale.x = x_direction
 		
 		# vertical
@@ -63,6 +73,13 @@ func _physics_process(delta):
 			current_jump_time += delta
 			current_jump_time = clamp(current_jump_time, JUMP_TIME_START, MAX_JUMP_TIME)
 		if Input.is_action_just_released("ui_select"):
+			$JumpAudioPlayer.play()
+			
+			var jump_fart = jump_fart_node.instance()
+			jump_fart.is_left = true if last_facing_direction == 1 else false
+			jump_fart.position = self.position
+			get_tree().get_root().get_node("LevelNode").add_child(jump_fart)
+			
 			var final_jump_speed = get_jump_speed() * (current_jump_time / MAX_JUMP_TIME)
 			velocity.y = -final_jump_speed
 			velocity.x = (x_direction * final_jump_speed) / 2
@@ -75,7 +92,10 @@ func _physics_process(delta):
 		if velocity.x != 0:
 			last_x_velocity = velocity.x
 		if is_on_wall():
+			$BonkAudioPlayer.play()
 			velocity.x = -last_x_velocity * 0.6
+		if is_on_ceiling():
+			$BonkAudioPlayer.play()
 		
 		if velocity.y >= 0:
 			switch_animation_state(AnimState.ANIM_FALLING)
@@ -146,25 +166,52 @@ func switch_animation_state(updated_state):
 		animation_state = updated_state
 		
 		if animation_state == AnimState.ANIM_IDLE:
-			$AnimatedSprite.play("idle")
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_idle")
+			else:
+				$AnimatedSprite.play("idle")
 		elif animation_state == AnimState.ANIM_WALK:
-			$AnimatedSprite.play("walk")
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_walk")
+			else:
+				$AnimatedSprite.play("walk")
 		elif animation_state == AnimState.ANIM_CHARGE:
-			$AnimatedSprite.play("charge")
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_charge")
+			else:
+				$AnimatedSprite.play("charge")
 		elif animation_state == AnimState.ANIM_HOLD:
-			$AnimatedSprite.play("hold")
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_hold")
+			else:
+				$AnimatedSprite.play("hold")
 		elif animation_state == AnimState.ANIM_LAUNCH:
-			$AnimatedSprite.play("launch")
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_launch")
+			else:
+				$AnimatedSprite.play("launch")
 		elif animation_state == AnimState.ANIM_RISING:
-			$AnimatedSprite.play("rising")
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_rising")
+			else:
+				$AnimatedSprite.play("rising")
 		elif animation_state == AnimState.ANIM_FALLING:
-			$AnimatedSprite.play("falling") 
+			if is_floatiness_enabled:
+				$AnimatedSprite.play("space_falling")
+			else:
+				$AnimatedSprite.play("falling")
+		elif animation_state == AnimState.ANIM_GET_BANANA:
+			$AnimatedSprite.play("get_banana")
+		elif animation_state == AnimState.ANIM_CELEBRATION:
+			$AnimatedSprite.play("celebration")
 			
 func on_animation_finish():
 	if animation_state == AnimState.ANIM_CHARGE:
 		switch_animation_state(AnimState.ANIM_HOLD)
 	elif animation_state == AnimState.ANIM_LAUNCH:
 		switch_animation_state(AnimState.ANIM_RISING)
+	elif animation_state == AnimState.ANIM_GET_BANANA:
+		switch_animation_state(AnimState.ANIM_CELEBRATION)
 
 
 # ===================== BANANA
@@ -174,6 +221,20 @@ func did_get_banana(banana):
 		current_banana = banana
 		current_banana.disable_banana()
 
+
+# ===================== GRAVITY
+
+func toggle_floatiness():
+	is_floatiness_enabled = !is_floatiness_enabled
+	floatiness = 1.0 if !is_floatiness_enabled else 0.7
+
+	
+# ===================== FINISHED GAME
+
+func on_finished_game():
+	did_finish_game = true
+	$PowerupAudioPlayer.play()
+	switch_animation_state(AnimState.ANIM_GET_BANANA)
 
 # ===================== BLACK HOLE
 

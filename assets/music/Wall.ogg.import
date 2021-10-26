@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Wall.ogg-d672b69226fa4eba918642fd1e5afe12.oggstr"
+
+[deps]
+
+source_file="res://assets/music/Wall.ogg"
+dest_files=[ "res://.import/Wall.ogg-d672b69226fa4eba918642fd1e5afe12.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

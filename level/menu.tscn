@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://gui/settings_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://level/settings.tscn" type="PackedScene" id=2]
+[ext_resource path="res://level/menu.gd" type="Script" id=3]
+[ext_resource path="res://assets/background/main_background.png" type="Texture" id=4]
+[ext_resource path="res://assets/music/Button.wav" type="AudioStream" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 80, 28 )
+
+[node name="Menu" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="MainBackground" type="Sprite" parent="."]
+position = Vector2( 128, 96 )
+texture = ExtResource( 4 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 0.25, 0.25 )
+limit_left = 0
+limit_top = 0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="StartArea2D" type="Area2D" parent="CanvasLayer"]
+position = Vector2( 512, 656 )
+z_index = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/StartArea2D"]
+shape = SubResource( 1 )
+
+[node name="QuestionMark" parent="CanvasLayer" instance=ExtResource( 1 )]
+position = Vector2( 995, 740 )
+
+[node name="Settings" parent="." instance=ExtResource( 2 )]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -15.0
+[connection signal="input_event" from="CanvasLayer/StartArea2D" to="." method="_on_StartArea2D_input_event"]

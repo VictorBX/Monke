@@ -1,0 +1,67 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://assets/items/gold_banana/gold_banana_00.png" type="Texture" id=1]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_01.png" type="Texture" id=2]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_02.png" type="Texture" id=3]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_03.png" type="Texture" id=4]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_06.png" type="Texture" id=5]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_07.png" type="Texture" id=6]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_08.png" type="Texture" id=7]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_09.png" type="Texture" id=8]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_10.png" type="Texture" id=9]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_11.png" type="Texture" id=10]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_12.png" type="Texture" id=11]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_04.png" type="Texture" id=12]
+[ext_resource path="res://assets/items/gold_banana/gold_banana_05.png" type="Texture" id=13]
+[ext_resource path="res://items/gold_banana.gd" type="Script" id=14]
+[ext_resource path="res://particles/shine.tscn" type="PackedScene" id=15]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 5.26687, 5.36308 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
+"loop": false,
+"name": "shine",
+"speed": 48.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:position")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ), Vector2( 0, 1 ) ]
+}
+
+[node name="GoldBanana" type="Area2D"]
+script = ExtResource( 14 )
+
+[node name="CPUParticles2D" parent="." instance=ExtResource( 15 )]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 2 )
+animation = "shine"
+frame = 12
+playing = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
+anims/idle = SubResource( 3 )

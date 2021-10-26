@@ -1,0 +1,171 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://assets/font/HelvetiPixel.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/settings/right_arrow.png" type="Texture" id=2]
+[ext_resource path="res://assets/settings/spacebar.png" type="Texture" id=3]
+[ext_resource path="res://assets/settings/left_arrow.png" type="Texture" id=4]
+[ext_resource path="res://level/settings.gd" type="Script" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.745098 )
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 32
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 32
+font_data = ExtResource( 1 )
+
+[node name="Settings" type="CanvasLayer" groups=[
+"settings",
+]]
+script = ExtResource( 5 )
+
+[node name="BackgroundPanel" type="Panel" parent="."]
+visible = false
+margin_left = 50.0
+margin_top = 47.916
+margin_right = 974.0
+margin_bottom = 715.916
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreditsRichTextLabel" type="RichTextLabel" parent="BackgroundPanel"]
+margin_left = 70.116
+margin_top = 463.003
+margin_right = 875.116
+margin_bottom = 615.003
+custom_fonts/normal_font = SubResource( 2 )
+bbcode_enabled = true
+bbcode_text = "[center][u]Credits[/u][/center]
+victor_bx - programming
+anna - art
+alexfanet - music/sfx (soundcloud.com/alexfanet)
+"
+text = "Credits
+victor_bx - programming
+anna - art
+alexfanet - music/sfx (soundcloud.com/alexfanet)
+"
+scroll_active = false
+
+[node name="ControlsRichTextLabel" type="RichTextLabel" parent="BackgroundPanel"]
+margin_left = 70.0
+margin_top = 114.0
+margin_right = 409.0
+margin_bottom = 145.0
+custom_fonts/normal_font = SubResource( 3 )
+bbcode_enabled = true
+bbcode_text = "[center][u]Controls[/u][/center]"
+text = "Controls"
+
+[node name="SpacebarSprite" type="Sprite" parent="BackgroundPanel"]
+position = Vector2( 154.599, 260 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 3 )
+
+[node name="RightSprite" type="Sprite" parent="BackgroundPanel"]
+position = Vector2( 395.874, 260 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 2 )
+
+[node name="LeftSprite" type="Sprite" parent="BackgroundPanel"]
+position = Vector2( 315.874, 260 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 4 )
+
+[node name="SpacebarLabel" type="Label" parent="BackgroundPanel"]
+margin_left = 70.599
+margin_top = 309.0
+margin_right = 239.599
+margin_bottom = 388.0
+custom_fonts/font = SubResource( 4 )
+text = "Hold spacebar
+to jump"
+align = 1
+
+[node name="MoveLabel" type="Label" parent="BackgroundPanel"]
+margin_left = 287.0
+margin_top = 309.0
+margin_right = 423.0
+margin_bottom = 388.0
+custom_fonts/font = SubResource( 5 )
+text = "Move"
+align = 1
+
+[node name="SoundRichTextLabel" type="RichTextLabel" parent="BackgroundPanel"]
+margin_left = 608.0
+margin_top = 114.0
+margin_right = 828.0
+margin_bottom = 151.0
+custom_fonts/normal_font = SubResource( 6 )
+bbcode_enabled = true
+bbcode_text = "[center][u]Sound[/u][/center]"
+text = "Sound"
+
+[node name="MusicVSlider" type="VSlider" parent="BackgroundPanel"]
+margin_left = 634.711
+margin_top = 214.736
+margin_right = 650.711
+margin_bottom = 374.736
+min_value = -24.0
+max_value = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SFXVSlider" type="VSlider" parent="BackgroundPanel"]
+margin_left = 789.484
+margin_top = 217.923
+margin_right = 805.484
+margin_bottom = 377.923
+min_value = -24.0
+max_value = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MusicLabel" type="Label" parent="BackgroundPanel"]
+margin_left = 613.0
+margin_top = 167.174
+margin_right = 673.0
+margin_bottom = 195.174
+custom_fonts/font = SubResource( 7 )
+text = "Music"
+
+[node name="SFXLabel" type="Label" parent="BackgroundPanel"]
+margin_left = 776.0
+margin_top = 168.81
+margin_right = 818.0
+margin_bottom = 196.81
+custom_fonts/font = SubResource( 8 )
+text = "SFX"
+[connection signal="value_changed" from="BackgroundPanel/MusicVSlider" to="." method="_on_MusicVSlider_value_changed"]
+[connection signal="value_changed" from="BackgroundPanel/SFXVSlider" to="." method="_on_SFXVSlider_value_changed"]
