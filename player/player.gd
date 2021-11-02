@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-enum AnimState {ANIM_IDLE, ANIM_WALK, ANIM_CHARGE, ANIM_HOLD, ANIM_LAUNCH, ANIM_RISING, ANIM_FALLING, ANIM_GET_BANANA, ANIM_CELEBRATION}
+enum AnimState {ANIM_IDLE, ANIM_WALK, ANIM_CHARGE, ANIM_HOLD, ANIM_LAUNCH, ANIM_RISING, ANIM_FALLING, ANIM_GET_BANANA, ANIM_CELEBRATION, ANIM_PRETWERK, ANIM_TWERK}
 
 const GRAVITY = 800
 const MAX_JUMP_TIME = 1.0
@@ -10,6 +10,7 @@ const BANANA_JUMP_SPEED = 480
 const MAX_X_SPEED = 64
 const SLOPE_SPEED = 250
 const BLACK_HOLE_GRAVITY = 200
+const TWERK_TIME = 15.0
 
 var velocity = Vector2.ZERO
 var current_jump_time = JUMP_TIME_START
@@ -25,6 +26,8 @@ var is_floatiness_enabled = false
 var did_finish_game = false
 var jump_fart_node = preload("res://particles/jump_fart.tscn")
 var last_facing_direction = 1
+var force_redraw = false
+var twerk_timer = 0
 
 func _ready():
 	$AnimatedSprite.connect("animation_finished", self, "on_animation_finish")
@@ -53,11 +56,16 @@ func _physics_process(delta):
 		
 		if not is_charging_jump:
 			if x_direction != 0:
+				twerk_timer = 0
 				switch_animation_state(AnimState.ANIM_WALK)
 				velocity.x += x_direction * delta * 512
 				velocity.x = clamp(velocity.x, -MAX_X_SPEED, MAX_X_SPEED)
 			else:
-				switch_animation_state(AnimState.ANIM_IDLE)
+				twerk_timer += delta
+				if twerk_timer >= TWERK_TIME:
+					switch_animation_state(AnimState.ANIM_PRETWERK)
+				else:
+					switch_animation_state(AnimState.ANIM_IDLE)
 				velocity.x = lerp(velocity.x, 0, 0.5)
 		
 		if x_direction != 0:
@@ -162,8 +170,9 @@ func on_finished_banana_timer():
 # ===================== ANIMATION
 
 func switch_animation_state(updated_state):
-	if animation_state != updated_state:
+	if animation_state != updated_state || force_redraw:
 		animation_state = updated_state
+		force_redraw = false
 		
 		if animation_state == AnimState.ANIM_IDLE:
 			if is_floatiness_enabled:
@@ -204,6 +213,10 @@ func switch_animation_state(updated_state):
 			$AnimatedSprite.play("get_banana")
 		elif animation_state == AnimState.ANIM_CELEBRATION:
 			$AnimatedSprite.play("celebration")
+		elif animation_state == AnimState.ANIM_PRETWERK:
+			$AnimatedSprite.play("prewtwerk")
+		elif animation_state == AnimState.ANIM_TWERK:
+			$AnimatedSprite.play("twerk")
 			
 func on_animation_finish():
 	if animation_state == AnimState.ANIM_CHARGE:
@@ -212,6 +225,8 @@ func on_animation_finish():
 		switch_animation_state(AnimState.ANIM_RISING)
 	elif animation_state == AnimState.ANIM_GET_BANANA:
 		switch_animation_state(AnimState.ANIM_CELEBRATION)
+	elif animation_state == AnimState.ANIM_PRETWERK:
+		switch_animation_state(AnimState.ANIM_TWERK)
 
 
 # ===================== BANANA
@@ -227,6 +242,7 @@ func did_get_banana(banana):
 func toggle_floatiness():
 	is_floatiness_enabled = !is_floatiness_enabled
 	floatiness = 1.0 if !is_floatiness_enabled else 0.7
+	force_redraw = true
 
 	
 # ===================== FINISHED GAME

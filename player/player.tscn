@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=80 format=2]
 
 [ext_resource path="res://assets/player/idle/monke_idle_2.png" type="Texture" id=1]
 [ext_resource path="res://assets/player/idle/monke_idle_4.png" type="Texture" id=2]
@@ -69,9 +69,22 @@
 [ext_resource path="res://assets/player/walk/space/monke_walk_1.png" type="Texture" id=67]
 [ext_resource path="res://assets/player/walk/space/monke_walk_2.png" type="Texture" id=68]
 [ext_resource path="res://assets/player/walk/space/monke_walk_3.png" type="Texture" id=69]
+[ext_resource path="res://assets/player/twerk/twerk_idle_1.png" type="Texture" id=70]
+[ext_resource path="res://assets/player/pretwerk/twerk_00.png" type="Texture" id=71]
+[ext_resource path="res://assets/player/pretwerk/twerk_01.png" type="Texture" id=72]
+[ext_resource path="res://assets/player/pretwerk/twerk_02.png" type="Texture" id=73]
+[ext_resource path="res://assets/player/pretwerk/twerk_03.png" type="Texture" id=74]
+[ext_resource path="res://assets/player/pretwerk/twerk_04.png" type="Texture" id=75]
+[ext_resource path="res://assets/player/pretwerk/twerk_05.png" type="Texture" id=76]
+[ext_resource path="res://assets/player/twerk/twerk_idle_0.png" type="Texture" id=77]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
+"frames": [ ExtResource( 71 ), ExtResource( 72 ), ExtResource( 73 ), ExtResource( 74 ), ExtResource( 75 ), ExtResource( 76 ) ],
+"loop": true,
+"name": "pretwerk",
+"speed": 6.0
+}, {
 "frames": [ ExtResource( 63 ), ExtResource( 62 ), ExtResource( 64 ), ExtResource( 61 ) ],
 "loop": true,
 "name": "space_launch",
@@ -80,11 +93,6 @@ animations = [ {
 "frames": [ ExtResource( 56 ), ExtResource( 54 ), ExtResource( 59 ), ExtResource( 58 ), ExtResource( 57 ), ExtResource( 60 ), ExtResource( 55 ) ],
 "loop": true,
 "name": "space_hold",
-"speed": 8.0
-}, {
-"frames": [ ExtResource( 7 ), ExtResource( 6 ), ExtResource( 1 ), ExtResource( 4 ), ExtResource( 2 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 3 ) ],
-"loop": true,
-"name": "idle",
 "speed": 8.0
 }, {
 "frames": [ ExtResource( 48 ), ExtResource( 43 ), ExtResource( 41 ), ExtResource( 44 ), ExtResource( 45 ), ExtResource( 46 ), ExtResource( 42 ), ExtResource( 47 ) ],
@@ -151,6 +159,16 @@ animations = [ {
 "loop": true,
 "name": "celebration",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 77 ), ExtResource( 70 ) ],
+"loop": true,
+"name": "twerk",
+"speed": 4.0
+}, {
+"frames": [ ExtResource( 7 ), ExtResource( 6 ), ExtResource( 1 ), ExtResource( 4 ), ExtResource( 2 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "idle",
+"speed": 8.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -164,7 +182,7 @@ script = ExtResource( 9 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "idle"
-frame = 5
+frame = 6
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
