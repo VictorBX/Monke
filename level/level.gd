@@ -4,8 +4,15 @@ const LEVEL_HEIGHT = 192.0
 const SAVE_FILE_LOCATION = "user://return_to_monke.save"
 
 var last_camera_offset
+var onbeforeunload_ref = JavaScript.create_callback(self, "_js_onbeforeunload")
 
 func _ready():
+	# html5 build
+	if JavaScript:
+		var window = JavaScript.get_interface("window")
+		if window:
+			window.onbeforeunload = onbeforeunload_ref
+	
 	# check for save data
 	read_save_data()
 
@@ -23,6 +30,11 @@ func _process(delta):
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		save_data()
+		
+func _js_onbeforeunload(args):
+	var js_event = args[0]
+	js_event.preventDefault()
+	js_event.returnValue = ''
 
 # Save data
 func save_data():
@@ -58,6 +70,7 @@ func read_save_data():
 				$HUDCanvasLayer.gameplay_time_seconds = node_data["gameplay_time_seconds"]
 				$HUDCanvasLayer.update_timer()
 		save_file.close()
+		clear_save_data()
 
 # Game Setting Callbacks
 func did_save_and_quit_game():

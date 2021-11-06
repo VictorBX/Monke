@@ -49,6 +49,7 @@ font_data = ExtResource( 1 )
 script = ExtResource( 5 )
 
 [node name="BackgroundPanel" type="Panel" parent="."]
+visible = false
 margin_left = 50.0
 margin_top = 47.916
 margin_right = 974.0
