@@ -26,3 +26,16 @@ func _on_SFXVSlider_value_changed(value):
 	else:
 		AudioServer.set_bus_mute(SFX_INDEX, false)
 		AudioServer.set_bus_volume_db(SFX_INDEX, volume)
+
+func hide_quit():
+	$BackgroundPanel/QuitRichTextLabel.hide()
+	$BackgroundPanel/SaveAndQuitButton.hide()
+	$BackgroundPanel/ResetButton.hide()
+	$BackgroundPanel/SaveAndQuitButton.disabled = true
+	$BackgroundPanel/ResetButton.disabled = true
+
+func _on_SaveAndQuitButton_pressed():
+	get_tree().call_group("level", "did_save_and_quit_game")
+
+func _on_ResetButton_pressed():
+	get_tree().call_group("level", "did_reset_game")
